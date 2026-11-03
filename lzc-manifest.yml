@@ -6,11 +6,10 @@ application:
   upstreams:
     - location: /
       backend: http://wbo:80/
-
 services:
   wbo:
-    # upstream: lovasoa/wbo:2.18.32
-    image: docker.1ms.run/lovasoa/wbo:2.18.32
+    # upstream: lovasoa/wbo:v2.18.32
+    image: docker.1ms.run/lovasoa/wbo:v2.18.32
     environment:
       # Behind the entry, so the real client address arrives via the forwarded
       # header instead of the proxy's own address (upstream README calls this out).
@@ -25,7 +24,6 @@ services:
       timeout: 10s
       retries: 15
       start_period: 60s
-
 usage: |
   协作白板 WBO 是自托管的在线白板：多个人可以在同一块画板上实时绘制，
   支持画笔、便签、图片，并导出为图片或 JSON。
