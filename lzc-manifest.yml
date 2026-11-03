@@ -1,0 +1,41 @@
+application:
+  subdomain: wbo
+  multi_instance: false
+  # A whiteboard has no accounts: anyone who can reach it can draw. It therefore
+  # stays behind the LazyCat entry instead of exposing public_path.
+  upstreams:
+    - location: /
+      backend: http://wbo:80/
+
+services:
+  wbo:
+    # upstream: lovasoa/wbo:2.18.32
+    image: docker.1ms.run/lovasoa/wbo:2.18.32
+    environment:
+      # Behind the entry, so the real client address arrives via the forwarded
+      # header instead of the proxy's own address (upstream README calls this out).
+      - WBO_IP_SOURCE=X-Forwarded-For
+      - TZ=Asia/Shanghai
+    binds:
+      # Boards are stored here (upstream asks for uid 1000 ownership).
+      - /lzcapp/var/server-data:/opt/app/server-data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80/ || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 15
+      start_period: 60s
+
+usage: |
+  协作白板 WBO 是自托管的在线白板：多个人可以在同一块画板上实时绘制，
+  支持画笔、便签、图片，并导出为图片或 JSON。
+
+  - **没有账号体系**：任何人都能通过链接上的白板名进入协作，
+    因此访问由懒猫入口负责鉴权——只要你能访问这个入口就能使用白板。
+    请只在自己信任的网络里开放。
+  - 白板数据保存在应用自己的持久化目录里，重启不会丢失；
+    不需要你另外准备数据库。
+  - 白板名就是链接末尾的那一段（例如 `https://你的域名/abcd`），
+    换一个名字就是一块新白板；同一名字的人会看到同一块板。
+  - 未做真机验证：多人实时绘制、便签与图片、导出，以及重启后数据留存
+    均未在设备上实测。

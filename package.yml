@@ -1,0 +1,18 @@
+package: community.lazycat.app.wbo
+name: WBO
+version: 0.0.0
+description: "Self-hosted collaborative whiteboard: draw together in real time on a shared board with sticky notes, images and export."
+min_os_version: "1.5.0"
+homepage: https://wbo.ophir.dev/
+author: lovasoa
+license: AGPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: 协作白板
+    description: "自托管协作白板：多人在同一块画板上实时绘制，支持便签、图片与导出。"
+  en:
+    name: WBO
+    description: "Self-hosted collaborative whiteboard: draw together in real time on a shared board with sticky notes, images and export."
